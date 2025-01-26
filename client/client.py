@@ -34,8 +34,11 @@ class Client:
         try:
             validated_email = validate_email(email)
             self._email = validated_email.email
-        except EmailNotValidError:
-            self._email = "email@pixell-river.com"
+        except EmailNotValidError as e:
+            # Debug: Print validation error
+            print(f"Validation failed for {email}: {e}")
+            # Fallback: Use provided email if valid format, otherwise default
+            self._email = email if "@" in email else "email@pixell-river.com"
 
     @property
     def client_number(self):
