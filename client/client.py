@@ -3,73 +3,74 @@ Description: This file contains the Client class for the banking application.
 Author: Md Apurba Khan
 """
 
-from email_validator import validate_email, EmailNotValidError
+from email_validator import EmailNotValidError, validate_email
+
 
 class Client:
-    def __init__(self, client_number, first_name, last_name, email):
+    """
+    Represents a client with unique identification and contact details.
+    """
+
+    def __init__(self, client_number: int, first_name: str, last_name: str, email_address: str):
         """
-        Set up a new Client instance.
-        
-        Args:
-            client_number (int): Client's unique identifier
-            first_name (str): Client's first name
-            last_name (str): Client's last name
-            email (str): Client's email address
-        
+        Initializes a new client with a client number, first name, last name, and email address.
+
         Raises:
-            ValueError: For invalid client number or empty names
+            ValueError: If client_number is not an integer.
+            ValueError: If first_name or last_name is blank after stripping.
         """
-        if not isinstance(client_number, int) or client_number < 1000:
-            raise ValueError("Client number must be an integer of at least 1000")
-        self._client_number = client_number
+        if not isinstance(client_number, int):
+            raise ValueError("Client number must be an integer.")
 
-        if not first_name.strip():
-            raise ValueError("First name can't be empty")
-        self._first_name = first_name.strip()
-
-        if not last_name.strip():
-            raise ValueError("Last name can't be empty")
-        self._last_name = last_name.strip()
+        first_name = first_name.strip()
+        last_name = last_name.strip()
+        if not first_name:
+            raise ValueError("First name cannot be blank.")
+        if not last_name:
+            raise ValueError("Last name cannot be blank.")
 
         try:
-            validated_email = validate_email(email)
-            self._email = validated_email.email
-        except EmailNotValidError as e:
-            # Debug: Print validation error
-            print(f"Validation failed for {email}: {e}")
-            # Fallback: Use provided email if valid format, otherwise default
-            self._email = email if "@" in email else "email@pixell-river.com"
+            validated_email = validate_email(email_address, check_deliverability=False).normalized
+        except EmailNotValidError:
+            validated_email = "email@pixell-river.com"
+
+        self.__client_number = client_number
+        self.__first_name = first_name
+        self.__last_name = last_name
+        self.__email_address = validated_email
 
     @property
-    def client_number(self):
-        return self._client_number
+    def client_number(self) -> int:
+        """Returns the client number."""
+        return self.__client_number
 
     @property
-    def first_name(self):
-        return self._first_name
+    def first_name(self) -> str:
+        """Returns the first name."""
+        return self.__first_name
 
     @property
-    def last_name(self):
-        return self._last_name
+    def last_name(self) -> str:
+        """Returns the last name."""
+        return self.__last_name
 
     @property
-    def email(self):
-        return self._email
+    def email_address(self) -> str:
+        """Returns the email address."""
+        return self.__email_address
 
-    def __str__(self):
-        return f"{self._last_name}, {self._first_name} [{self._client_number}] - {self._email}"
+    def __eq__(self, other) -> bool:
+        """Check if two clients are equal based on client number."""
+        return isinstance(other, Client) and self.__client_number == other.client_number
 
-    def __repr__(self):
-        return f"Client({self._client_number}, {self._first_name}, {self._last_name}, {self._email})"
+    def __lt__(self, other) -> bool:
+        """Check if this client is less than another client based on client number."""
+        return isinstance(other, Client) and self.__client_number < other.client_number
 
-    def __eq__(self, other):
-        return self._client_number == other._client_number
+    def __gt__(self, other) -> bool:
+        """Check if this client is greater than another client based on client number."""
+        return isinstance(other, Client) and self.__client_number > other.client_number
 
-    def __hash__(self):
-        return hash(self._client_number)
-
-    def __lt__(self, other):
-        return self._client_number < other._client_number   
-
-    def __gt__(self, other):
-        return self._client_number > other._client_number   
+    def __str__(self) -> str:
+        """Returns a formatted string representation of the client."""
+        return f"{self.__last_name}, {self.__first_name} [{self.__client_number}] - {self.__email_address}"
