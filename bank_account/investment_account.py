@@ -1,49 +1,57 @@
 """
-Description: This file contains the InvestmentAccount class, a subclass of BankAccount.
+Description: This file defines the InvestmentAccount class,
+which extends BankAccount.
 Author: Md Apurba Khan
 """
 
-from bank_account.bank_account import BankAccount
 from datetime import date, timedelta
 
+from bank_account.bank_account import BankAccount
+
 __author__ = "Md Apurba Khan"
-__version__ = "1.0.0"
+__version__ = "1.4.0"
+
 
 class InvestmentAccount(BankAccount):
-    """
-    Represents an investment account with a management fee.
-    """
+    """Represents an investment account with management fees."""
 
-    # Calculate date 10 years ago from today
-    TEN_YEARS_AGO = date.today() - timedelta(days=3652)
+    TEN_YEARS_AGO = date.today() - timedelta(days=10 * 365.25)
 
-    def __init__(self, account_number, client_number, balance, date_created=None, management_fee=2.55):
+    def __init__(
+        self,
+        account_number: int,
+        client_number: int,
+        balance: float,
+        date_created: date,
+        management_fee: float,
+    ):
         """
-        Initializes InvestmentAccount with a management fee.
+        Initializes an investment account.
 
         Args:
-            account_number (int): Unique identifier for the account.
-            client_number (int): Unique identifier for the client.
-            balance (float): Initial balance of the account.
-            date_created (date, optional): Date the account was created. Defaults to today.
-            management_fee (float, optional): The management fee applied to the account. Defaults to 2.55.
+            account_number (int): Account number.
+            client_number (int): Client number.
+            balance (float): Initial balance.
+            date_created (date): Date account was created.
+            management_fee (float): Flat-rate management fee.
         """
         super().__init__(account_number, client_number, balance, date_created)
-        self._management_fee = float(management_fee)
 
-    def get_service_charges(self):
+        # Validate management fee
+        try:
+            self._management_fee = float(management_fee)
+        except ValueError:
+            self._management_fee = 2.55  # Default management fee if invalid
+
+    def get_service_charges(self) -> float:
         """
-        Calculates the service charges for an InvestmentAccount.
+        Calculates the service charge based on account age.
 
         Returns:
-            float: The calculated service charge.
+            float: Calculated service charge.
         """
-        if self._date_created < self.TEN_YEARS_AGO:
-            return self.BASE_SERVICE_CHARGE
-        return self.BASE_SERVICE_CHARGE + self._management_fee
-
-    def __str__(self):
-        """Returns a formatted string representation of the InvestmentAccount."""
-        base_str = super().__str__()
-        fee_str = f"${self._management_fee:.2f}" if self._date_created >= self.TEN_YEARS_AGO else "Waived"
-        return f"{base_str}\nManagement Fee: {fee_str} Account Type: Investment"
+        base_charge = 0.50
+        if self._date_created > InvestmentAccount.TEN_YEARS_AGO:
+            # Apply management fee if account is under 10 years old
+            return base_charge + self._management_fee
+        return base_charge  # Fee waived for accounts older than 10 years
