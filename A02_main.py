@@ -4,7 +4,7 @@ the BankAccount subclasses.
 """
 
 __author__ = "ACE Faculty"
-__version__ = "1.0.0"
+__version__ = "1.6.0"
 __credits__ = "Md Apurba Khan"
 
 # 1. Import all BankAccount types using the bank_account package
