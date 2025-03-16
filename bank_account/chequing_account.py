@@ -1,107 +1,45 @@
-"""
-Description: This file defines the ChequingAccount class,
-which extends BankAccount.
-Author: Md Apurba Khan
-"""
-
 from datetime import date
-
 from bank_account.bank_account import BankAccount
 
 __author__ = "Md Apurba Khan"
-__version__ = "1.2.0"
-
+__version__ = "1.8.0"
 
 class ChequingAccount(BankAccount):
-    """Represents a chequing account with overdraft features."""
+    """Class representing a chequing account, inheriting from BankAccount."""
 
-    def __init__(
-        self,
-        account_number: int,
-        client_number: int,
-        balance: float,
-        date_created: date,
-        overdraft_limit: float,
-        overdraft_rate: float,
-    ):
-        """
-        Initializes a chequing account with overdraft handling.
+    def __init__(self, account_number, client_number, balance, date_created, overdraft_limit, overdraft_rate):
+        """Initialize a ChequingAccount instance.
 
         Args:
-            account_number (int): Account number.
-            client_number (int): Client number.
-            balance (float): Initial balance.
-            date_created (date): Date account was created.
-            overdraft_limit (float): Maximum overdraft allowed.
-            overdraft_rate (float): Overdraft fee rate.
+            account_number (str): The account number.
+            client_number (str): The client number.
+            balance (float): The initial balance.
+            date_created (date): The date the account was created.
+            overdraft_limit (float): The maximum amount the balance can be overdrawn.
+            overdraft_rate (float): The rate at which overdraft fees are applied.
         """
         super().__init__(account_number, client_number, balance, date_created)
+        self.__overdraft_limit = float(overdraft_limit) if self._is_valid_float(overdraft_limit) else -100.0
+        self.__overdraft_rate = float(overdraft_rate) if self._is_valid_float(overdraft_rate) else 0.05
 
-        # Validate overdraft limit
-        try:
-            self._overdraft_limit = float(overdraft_limit)
-        except ValueError:
-            self._overdraft_limit = -100  # Default value if invalid
-
-        # Validate overdraft rate
-        try:
-            self._overdraft_rate = float(overdraft_rate)
-        except ValueError:
-            self._overdraft_rate = 0.05  # Default overdraft rate
-
-    def withdraw(self, amount: float):
-        """
-        Withdraws money from the account, considering overdraft limit.
-
-        Args:
-            amount (float): Amount to withdraw.
-
-        Raises:
-            ValueError: If the withdrawal exceeds overdraft limit.
-        """
-        if amount <= 0:
-            raise ValueError(
-                f"Withdrawal amount must be positive: ${amount:.2f}"
-            )
-
-        # Simulate new balance after withdrawal
-        new_balance = self._balance - amount
-
-        # ✅ **Fixed Logic: Allow withdrawal within overdraft limit**
-        if new_balance < self._overdraft_limit:
-            raise ValueError(
-                f"Cannot withdraw ${amount:.2f}. "
-                f"Overdraft limit of ${self._overdraft_limit:.2f} exceeded."
-            )
-
-        self._balance = new_balance  # Perform withdrawal
-
-    def get_service_charges(self) -> float:
-        """
-        Calculates the service charge based on overdraft.
+    def get_service_charges(self):
+        """Calculate service charges for the chequing account.
 
         Returns:
-            float: Calculated service charge.
+            float: The calculated service charges based on the balance, overdraft limit, and rate.
         """
-        if self._balance < 0:  # Check if account is in overdraft
-            # Calculate how much the account is overdrawn
-            overdraft_amount = abs(self._balance)
-            return (
-                overdraft_amount * self._overdraft_rate
-            )  # Charge on overdraft
-        return 0.50  # Default service charge when not in overdraft
+        service_charge = self.BASE_SERVICE_CHARGE
+        if self._balance < self.__overdraft_limit:
+            overdraft_amount = abs(self.__overdraft_limit - self._balance)
+            service_charge += overdraft_amount * self.__overdraft_rate
+        return service_charge
 
-    def __str__(self) -> str:
-        """
-        Returns a formatted string representation of the chequing account.
+    def __str__(self):
+        """Return a string representation of the ChequingAccount.
 
         Returns:
-            str: Account details with overdraft info.
+            str: A formatted string containing account details, including overdraft limit and rate.
         """
-        return (
-            f"Account Number: {self._account_number} "
-            f"Balance: ${self._balance:,.2f}\n"
-            f"Overdraft Limit: ${self._overdraft_limit:.2f} "
-            f"Overdraft Rate: {self._overdraft_rate * 100:.2f}% "
-            f"Account Type: Chequing"
-        )
+        return (f"Account Number: {self._account_number} Balance: ${self._balance:,.2f}\n"
+                f"Overdraft Limit: ${self.__overdraft_limit:,.2f} "
+                f"Overdraft Rate: {self.__overdraft_rate:.2%} Account Type: Cheq")
