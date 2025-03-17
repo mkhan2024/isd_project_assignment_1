@@ -1,7 +1,7 @@
 from abc import ABC
 
-__author__ = "Your Full Name"
-__version__ = "1.3.0"
+__author__ = "Md Apurba Khan"
+__version__ = "1.6.0"
 
 class Subject(ABC):
     """Abstract base class for subjects in the Observer Pattern.
