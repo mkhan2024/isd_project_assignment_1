@@ -33,10 +33,10 @@ def main():
 
     # 4a. Use ChequingAccount instance created in step 2 to deposit 
     #     enough money into the chequing account to avoid overdraft fees.
-    # try:
-    #     chequing.deposit(300)
-    # except Exception as e:
-    #     print(f"Error depositing into ChequingAccount: {e}")
+    try:
+        chequing.deposit(300)  # Brings balance to 100, above -100 limit
+    except Exception as e:
+        print(f"Error depositing into ChequingAccount: {e}")
 
     # 4b. Print the ChequingAccount
     print(chequing)
@@ -70,10 +70,10 @@ def main():
     # 7a. Use this SavingsAccount instance created in step 5 to withdraw 
     #     enough money from the savings account to cause the balance to fall 
     #     below the minimum balance.
-    # try:
-    #     savings.withdraw(20)
-    # except Exception as e:
-    #     print(f"Error withdrawing from SavingsAccount: {e}")
+    try:
+        savings.withdraw(20)  # Balance becomes 40, below 50 minimum
+    except Exception as e:
+        print(f"Error withdrawing from SavingsAccount: {e}")
 
     # 7b. Print the SavingsAccount.
     print(savings)
@@ -127,22 +127,22 @@ def main():
     #     by using the withdraw method of the superclass and withdrawing 
     #     the service charges determined by each instance invoking the 
     #     polymorphic get_service_charges method.
-    # try:
-    #     chequing.withdraw(chequing.get_service_charges())
-    # except Exception as e:
-    #     print(f"Error withdrawing service charges from ChequingAccount: {e}")
-    # try:
-    #     savings.withdraw(savings.get_service_charges())
-    # except Exception as e:
-    #     print(f"Error withdrawing service charges from SavingsAccount: {e}")
-    # try:
-    #     investment_new.withdraw(investment_new.get_service_charges())
-    # except Exception as e:
-    #     print(f"Error withdrawing service charges from InvestmentAccount (new): {e}")
-    # try:
-    #     investment_old.withdraw(investment_old.get_service_charges())
-    # except Exception as e:
-    #     print(f"Error withdrawing service charges from InvestmentAccount (old): {e}")
+    try:
+        chequing.withdraw(chequing.get_service_charges())
+    except Exception as e:
+        print(f"Error withdrawing service charges from ChequingAccount: {e}")
+    try:
+        savings.withdraw(savings.get_service_charges())
+    except Exception as e:
+        print(f"Error withdrawing service charges from SavingsAccount: {e}")
+    try:
+        investment_new.withdraw(investment_new.get_service_charges())
+    except Exception as e:
+        print(f"Error withdrawing service charges from InvestmentAccount (new): {e}")
+    try:
+        investment_old.withdraw(investment_old.get_service_charges())
+    except Exception as e:
+        print(f"Error withdrawing service charges from InvestmentAccount (old): {e}")
 
     # 13. Print each of the bank account objects created in steps 2, 5, 8 and 10.
     print(chequing)
