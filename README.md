@@ -34,5 +34,16 @@ Polymorphism was utilized by:
 ### Assignment 3: Applying Design Patterns
 
 ## Strategy Pattern
+- Used to calculate service charges in `ChequingAccount`, `SavingsAccount`, and `InvestmentAccount`.
+- Logic is in `OverdraftStrategy`, `MinimumBalanceStrategy`, and `ManagementFeeStrategy`.
+- Tested with `A02_main.py`.
 
-This application does use the Strategy Pattern to handle the service fee computations for various account kinds in a maintainable way. With concrete strategies 'OverdraftStrategy', 'ManagementFeeStrategy', 'MinimumBalanceStrategy' implementing particular rules for ChequingAccount, InvestmentAccount, and SavingsAccount Respectively, the ServiceChargeStrategy abstract base class defines the interface for calculating service charges. Following the Open-Closed Principle of SOLID design, this approach enable the addition of new account types or service charge policies without changing current bank account classes.
+## Observer Pattern
+- Notifies clients of big transactions (> $10,000) and low balances (< $100).
+- `Client` updates `observer_emails.txt`; `BankAccount` manages observers.
+- Tested with `A03_main.py`.
+
+## Running
+- Tests: `python -m unittest discover -s tests`
+- Strategy: `python A02_main.py`
+- Observer: `python A03_main.py`
