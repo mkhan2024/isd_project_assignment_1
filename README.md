@@ -30,3 +30,9 @@ Polymorphism was utilized by:
 - Developed unit tests for all account types to validate expected behaviors.
 - Used assertions to check class-specific service charges, withdrawals, and deposits.
 - Ensured that exceptions were raised correctly for invalid inputs.
+
+### Assignment 3: Applying Design Patterns
+
+## Strategy Pattern
+
+This application does use the Strategy Pattern to handle the service fee computations for various account kinds in a maintainable way. With concrete strategies 'OverdraftStrategy', 'ManagementFeeStrategy', 'MinimumBalanceStrategy' implementing particular rules for ChequingAccount, InvestmentAccount, and SavingsAccount Respectively, the ServiceChargeStrategy abstract base class defines the interface for calculating service charges. Following the Open-Closed Principle of SOLID design, this approach enable the addition of new account types or service charge policies without changing current bank account classes.

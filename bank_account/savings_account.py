@@ -1,12 +1,17 @@
 from datetime import date
 from bank_account.bank_account import BankAccount
+from patterns.strategy.minimum_balance_strategy import MinimumBalanceStrategy
 
 __author__ = "Md Apurba Khan"
-__version__ = "1.9.0"
+__version__ = "2.0.0"
 
 class SavingsAccount(BankAccount):
-    """Class representing a savings account, inheriting from BankAccount."""
-    SERVICE_CHARGE_PREMIUM = 2.0
+    """Class representing a savings account, inheriting from BankAccount.
+
+    Attributes:
+        __service_charge_strategy (MinimumBalanceStrategy): The strategy for calculating service charges.
+        __minimum_balance (float): The minimum balance before additional charges apply.
+    """
 
     def __init__(self, account_number, client_number, balance, date_created, minimum_balance):
         """Initialize a SavingsAccount instance.
@@ -20,17 +25,46 @@ class SavingsAccount(BankAccount):
         """
         super().__init__(account_number, client_number, balance, date_created)
         self.__minimum_balance = float(minimum_balance) if self._is_valid_float(minimum_balance) else 50.0
+        self.__service_charge_strategy = MinimumBalanceStrategy(self.__minimum_balance)
+
+    def deposit(self, amount):
+        """Deposit an amount into the savings account.
+
+        Args:
+            amount (float): The amount to deposit.
+
+        Raises:
+            ValueError: If the amount is not a positive number.
+        """
+        if not self._is_valid_float(amount) or float(amount) <= 0:
+            raise ValueError("Deposit amount must be a positive number.")
+        self._balance += float(amount)
+
+    def withdraw(self, amount):
+        """Withdraw an amount from the savings account.
+
+        Args:
+            amount (float): The amount to withdraw.
+
+        Raises:
+            ValueError: If the amount is not a positive number or if there are insufficient funds.
+        """
+        if not self._is_valid_float(amount) or float(amount) <= 0:
+            raise ValueError("Withdrawal amount must be a positive number.")
+        amount = float(amount)
+        if self._balance - amount < 0:
+            raise ValueError("Insufficient funds for withdrawal.")
+        self._balance -= amount
 
     def get_service_charges(self):
         """Calculate service charges for the savings account.
 
+        Delegates to the MinimumBalanceStrategy to compute charges based on balance and minimum balance.
+
         Returns:
-            float: The calculated service charges based on the balance and minimum balance.
+            float: The calculated service charges.
         """
-        service_charge = self.BASE_SERVICE_CHARGE
-        if self._balance < self.__minimum_balance:
-            service_charge *= self.SERVICE_CHARGE_PREMIUM
-        return service_charge
+        return self.__service_charge_strategy.calculate_service_charges(self._balance)
 
     def __str__(self):
         """Return a string representation of the SavingsAccount.
