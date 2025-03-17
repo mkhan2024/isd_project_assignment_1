@@ -24,8 +24,7 @@ class OverdraftStrategy(ServiceChargeStrategy):
     def calculate_service_charges(self, balance):
         """Calculate service charges for the chequing account.
 
-        If the balance is below the overdraft limit, an additional fee is applied based on the overdraft amount
-        and rate.
+        If the balance is negative, an additional fee is applied based on the overdraft amount and rate.
 
         Args:
             balance (float): The current balance of the account.
@@ -34,7 +33,7 @@ class OverdraftStrategy(ServiceChargeStrategy):
             float: The calculated service charge.
         """
         service_charge = self.BASE_SERVICE_CHARGE
-        if balance < self.__overdraft_limit:
-            overdraft_amount = abs(self.__overdraft_limit - balance)
+        if balance < 0:
+            overdraft_amount = abs(balance)
             service_charge += overdraft_amount * self.__overdraft_rate
         return service_charge
