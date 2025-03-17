@@ -3,7 +3,7 @@ from bank_account.bank_account import BankAccount
 from patterns.strategy.overdraft_strategy import OverdraftStrategy
 
 __author__ = "Md Apurba Khan"
-__version__ = "1.9.0"
+__version__ = "2.1.0"
 
 class ChequingAccount(BankAccount):
     """Class representing a chequing account, inheriting from BankAccount.
@@ -41,7 +41,7 @@ class ChequingAccount(BankAccount):
         """
         if not self._is_valid_float(amount) or float(amount) <= 0:
             raise ValueError("Deposit amount must be a positive number.")
-        self._balance += float(amount)
+        self.update_balance(amount)
 
     def withdraw(self, amount):
         """Withdraw an amount from the chequing account.
@@ -57,7 +57,7 @@ class ChequingAccount(BankAccount):
         amount = float(amount)
         if self._balance - amount < self.__overdraft_limit:
             raise ValueError("Withdrawal exceeds overdraft limit.")
-        self._balance -= amount
+        self.update_balance(-amount)
 
     def get_service_charges(self):
         """Calculate service charges for the chequing account.

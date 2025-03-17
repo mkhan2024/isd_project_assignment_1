@@ -3,7 +3,7 @@ from bank_account.bank_account import BankAccount
 from patterns.strategy.minimum_balance_strategy import MinimumBalanceStrategy
 
 __author__ = "Md Apurba Khan"
-__version__ = "2.0.0"
+__version__ = "2.2.0"
 
 class SavingsAccount(BankAccount):
     """Class representing a savings account, inheriting from BankAccount.
@@ -38,7 +38,7 @@ class SavingsAccount(BankAccount):
         """
         if not self._is_valid_float(amount) or float(amount) <= 0:
             raise ValueError("Deposit amount must be a positive number.")
-        self._balance += float(amount)
+        self.update_balance(amount)
 
     def withdraw(self, amount):
         """Withdraw an amount from the savings account.
@@ -54,7 +54,7 @@ class SavingsAccount(BankAccount):
         amount = float(amount)
         if self._balance - amount < 0:
             raise ValueError("Insufficient funds for withdrawal.")
-        self._balance -= amount
+        self.update_balance(-amount)
 
     def get_service_charges(self):
         """Calculate service charges for the savings account.

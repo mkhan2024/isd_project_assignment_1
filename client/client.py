@@ -28,21 +28,19 @@ class Client(Observer):
         Raises:
             ValueError: If client_number is not a valid integer (or string representation), or if first_name, last_name are invalid.
         """
-        # Validate client_number
         if client_number is None:
             raise ValueError("Client number cannot be None.")
         if isinstance(client_number, str):
             if not client_number.strip():
                 raise ValueError("Client number cannot be empty.")
             try:
-                int(client_number)  # Ensure it’s a valid integer string
+                int(client_number)
             except ValueError:
                 raise ValueError("Client number must be a valid integer or string representation of an integer.")
         elif not isinstance(client_number, int):
             raise ValueError("Client number must be an integer or string representation of an integer.")
-        self._client_number = client_number  # Keep as provided (int or str)
+        self._client_number = client_number
 
-        # Validate first_name and last_name
         if not isinstance(first_name, str) or not first_name.strip() or first_name is None:
             raise ValueError("First name must be a non-empty string.")
         if not isinstance(last_name, str) or not last_name.strip() or last_name is None:
@@ -51,10 +49,9 @@ class Client(Observer):
         self._first_name = first_name
         self._last_name = last_name
 
-        # Validate email_address
         email_pattern = re.compile(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
         if not isinstance(email_address, str) or not email_address.strip() or email_address is None or not email_pattern.match(email_address):
-            self._email_address = "email@pixell-river.com"  # Default for invalid email
+            self._email_address = "email@pixell-river.com"
         else:
             self._email_address = email_address
 
@@ -104,7 +101,8 @@ class Client(Observer):
         """
         subject = f"ALERT: Unusual Activity: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
         email_message = f"Notification for {self._client_number}: {self._first_name} {self._last_name}: {message}"
-        simulate_send_email(subject, email_message)
+        print(f"Debug: Sending notification for {self._client_number} - {subject} | {email_message}")  # Debug
+        simulate_send_email(self._email_address, subject, email_message)
 
     def __eq__(self, other):
         """Check equality based on client number.
@@ -130,7 +128,7 @@ class Client(Observer):
         """
         if not isinstance(other, Client):
             return NotImplemented
-        return str(self._client_number) < str(other._client_number)  # Compare as strings for consistency
+        return str(self._client_number) < str(other._client_number)
 
     def __str__(self):
         """Return a string representation of the Client.
