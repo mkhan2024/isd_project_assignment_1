@@ -1,6 +1,6 @@
 __author__ = "ACE Faculty"
 __version__ = "1.0.0"
-__credits__ = ""
+__credits__ = "Md Apurba Khan"
 
 import os
 import sys
@@ -10,6 +10,11 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 import csv
 from datetime import datetime
 import logging
+from bank_account.chequing_account import ChequingAccount
+from bank_account.savings_account import SavingsAccount
+from bank_account.investment_account import InvestmentAccount
+from client.client import Client
+from bank_account.bank_account import BankAccount
 
 # *******************************************************************************
 # GIVEN LOGGING AND FILE ACCESS CODE
@@ -21,7 +26,7 @@ root_dir = os.path.dirname(os.path.dirname(__file__))
 log_dir = os.path.join(root_dir, 'logs')
  
 # Create the log directory if it doesn't exist
-os.makedirs(log_dir, exist_ok = True)
+os.makedirs(log_dir, exist_ok=True)
  
 # Specify the path to the log file within the log directory
 log_file_path = os.path.join(log_dir, 'manage_data.log')
@@ -44,37 +49,96 @@ accounts_csv_path = os.path.join(data_dir, 'accounts.csv')
 # *******************************************************************************
 
 
-
-
-
-
-def load_data()->tuple[dict,dict]:
+def load_data() -> tuple[dict, dict]:
     """
     Populates a client dictionary and an account dictionary with 
     corresponding data from files within the data directory.
+
     Returns:
-        tuple containing client dictionary and account dictionary.
+        tuple: (client_listing, accounts) where client_listing maps client_number (int) to Client objects,
+               and accounts maps account_number (str) to BankAccount objects.
     """
     client_listing = {}
     accounts = {}
 
     # READ CLIENT DATA 
-    with open(clients_csv_path, newline='') as csvfile:
-        reader = csv.DictReader(csvfile)
-        
+    try:
+        with open(clients_csv_path, newline='') as csvfile:
+            reader = csv.DictReader(csvfile)
+            for record in reader:
+                try:
+                    client_number = int(record["client_number"])
+                    first_name = record["first_name"].strip()
+                    last_name = record["last_name"].strip()
+                    email_address = record["email_address"].strip()
+
+                    if not first_name:
+                        raise ValueError("First Name cannot be blank")
+
+                    client = Client(client_number, first_name, last_name, email_address)
+                    client_listing[client_number] = client
+                except ValueError as e:
+                    logging.error(f"Unable to create client: {str(e)}")
+                except Exception as e:
+                    logging.error(f"Unable to create client: unexpected error - {str(e)}")
+    except FileNotFoundError:
+        logging.error(f"Client file {clients_csv_path} not found")
 
     # READ ACCOUNT DATA
-    with open(accounts_csv_path, newline='') as csvfile:
-        reader = csv.DictReader(csvfile)  
+    try:
+        with open(accounts_csv_path, newline='') as csvfile:
+            reader = csv.DictReader(csvfile)
+            for record in reader:
+                try:
+                    account_number = str(record["account_number"])  # Your classes expect str
+                    client_number = str(record["client_number"])    # Your classes expect str
+                    balance = float(record["balance"])
+                    date_created = datetime.strptime(record["date_created"], "%Y-%m-%d").date()
+                    account_type = record["account_type"]
+
+                    if account_type == "ChequingAccount":
+                        overdraft_limit = float(record["overdraft_limit"])
+                        overdraft_rate = float(record["overdraft_rate"])
+                        account = ChequingAccount(
+                            account_number, client_number, balance, date_created,
+                            overdraft_limit, overdraft_rate
+                        )
+                    elif account_type == "SavingsAccount":
+                        minimum_balance = float(record["minimum_balance"])
+                        account = SavingsAccount(
+                            account_number, client_number, balance, date_created,
+                            minimum_balance
+                        )
+                    elif account_type == "InvestmentAccount":
+                        # CSV has no management_fee; use default from class (2.55)
+                        account = InvestmentAccount(
+                            account_number, client_number, balance, date_created, 2.55
+                        )
+                    else:
+                        raise ValueError("Not a valid account type")
+
+                    if int(client_number) in client_listing:
+                        accounts[account_number] = account
+                    else:
+                        logging.error(
+                            f"Bank Account: {account_number} contains invalid client number {client_number}"
+                        )
+                except ValueError as e:
+                    logging.error(f"Unable to create bank account: {str(e)}")
+                except Exception as e:
+                    logging.error(f"Unable to create bank account: unexpected error - {str(e)}")
+    except FileNotFoundError:
+        logging.error(f"Account file {accounts_csv_path} not found")
 
     # RETURN STATEMENT
-    
+    return (client_listing, accounts)
 
 
 def update_data(updated_account: BankAccount) -> None:
     """
     A function to update the accounts.csv file with balance 
     data provided in the BankAccount argument.
+
     Args:
         updated_account (BankAccount): A bank account containing an updated balance.
     """
@@ -101,7 +165,7 @@ def update_data(updated_account: BankAccount) -> None:
 
 # GIVEN TESTING SECTION:
 if __name__ == "__main__":
-    clients,accounts = load_data()
+    clients, accounts = load_data()
 
     print("=========================================")
     for client in clients.values():
