@@ -47,3 +47,5 @@ Polymorphism was utilized by:
 - Tests: `python -m unittest discover -s tests`
 - Strategy: `python A02_main.py`
 - Observer: `python A03_main.py`
+
+### Assignment 4: Programming Paradigms
