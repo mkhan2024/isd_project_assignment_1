@@ -1,40 +1,40 @@
 ---
 To: john.doe@example.com
-Subject: ALERT: Unusual Activity: 2025-03-16 22:22:03
-Message: Notification for 1001: John Doe: Large transaction $15000.00: on account CHK123.
+Subject: ALERT: Unusual Activity: 2025-04-04 12:49:53
+Message: Notification for 1001: John Doe: Large transaction $15,000.00: on account CHK123
 ---
 ---
 To: john.doe@example.com
-Subject: ALERT: Unusual Activity: 2025-03-16 22:22:03
-Message: Notification for 1001: John Doe: Low balance warning $-500.00: on account CHK123.
+Subject: ALERT: Unusual Activity: 2025-04-04 12:49:53
+Message: Notification for 1001: John Doe: Low balance warning $-500.00: on account CHK123
 ---
 ---
 To: john.doe@example.com
-Subject: ALERT: Unusual Activity: 2025-03-16 22:22:03
-Message: Notification for 1001: John Doe: Large transaction $16000.00: on account CHK123.
+Subject: ALERT: Unusual Activity: 2025-04-04 12:49:53
+Message: Notification for 1001: John Doe: Large transaction $16,000.00: on account CHK123
 ---
 ---
 To: john.doe@example.com
-Subject: ALERT: Unusual Activity: 2025-03-16 22:22:03
-Message: Notification for 1001: John Doe: Low balance warning $-450.00: on account CHK123.
+Subject: ALERT: Unusual Activity: 2025-04-04 12:49:53
+Message: Notification for 1001: John Doe: Low balance warning $-450.00: on account CHK123
 ---
 ---
 To: john.doe@example.com
-Subject: ALERT: Unusual Activity: 2025-03-16 22:22:03
-Message: Notification for 1001: John Doe: Low balance warning $50.00: on account SAV123.
+Subject: ALERT: Unusual Activity: 2025-04-04 12:49:53
+Message: Notification for 1001: John Doe: Low balance warning $50.00: on account SAV123
 ---
 ---
 To: jane.smith@example.com
-Subject: ALERT: Unusual Activity: 2025-03-16 22:22:03
-Message: Notification for 1002: Jane Smith: Large transaction $20000.00: on account SAV124.
+Subject: ALERT: Unusual Activity: 2025-04-04 12:49:53
+Message: Notification for 1002: Jane Smith: Large transaction $20,000.00: on account SAV124
 ---
 ---
 To: jane.smith@example.com
-Subject: ALERT: Unusual Activity: 2025-03-16 22:22:03
-Message: Notification for 1002: Jane Smith: Large transaction $20000.00: on account SAV124.
+Subject: ALERT: Unusual Activity: 2025-04-04 12:49:53
+Message: Notification for 1002: Jane Smith: Large transaction $20,000.00: on account SAV124
 ---
 ---
 To: jane.smith@example.com
-Subject: ALERT: Unusual Activity: 2025-03-16 22:22:03
-Message: Notification for 1002: Jane Smith: Low balance warning $50.00: on account SAV124.
+Subject: ALERT: Unusual Activity: 2025-04-04 12:49:53
+Message: Notification for 1002: Jane Smith: Low balance warning $50.00: on account SAV124
 ---

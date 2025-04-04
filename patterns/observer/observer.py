@@ -7,10 +7,24 @@ class Observer(ABC):
     """Abstract base class for observers in the Observer Pattern."""
 
     @abstractmethod
-    def update(self, message):
-        """Update the observer with a message.
+    def update(self, message: str) -> None:
+        """Update the observer with a message."""
+        pass
 
-        Args:
-            message (str): The message to be processed by the observer.
-        """
+class Subject(ABC):
+    """Abstract base class for subjects in the Observer Pattern."""
+
+    @abstractmethod
+    def attach(self, observer: 'Observer') -> None:
+        """Add an observer to the list."""
+        pass
+
+    @abstractmethod
+    def detach(self, observer: 'Observer') -> None:
+        """Remove an observer from the list."""
+        pass
+
+    @abstractmethod
+    def notify(self, message: str) -> None:
+        """Notify all observers of a change."""
         pass
