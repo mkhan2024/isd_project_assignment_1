@@ -47,3 +47,8 @@ Polymorphism was utilized by:
 - Tests: `python -m unittest discover -s tests`
 - Strategy: `python A02_main.py`
 - Observer: `python A03_main.py`
+
+### Assignment 4: Programming Paradigms
+- Added PySide6 GUI for client lookup `ClientLookupWindow` and transactions `AccountDetailsWindow` with event handlers.
+- Managed data with `manage_data.py`, reading CSVs and logging errors to `manage_data.log`.
+- To test run: `python A04_main.py` or `python -m user_interface.manage_data`.
