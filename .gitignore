@@ -19,3 +19,8 @@ __pycache__/
 # Installer
   - *.whl
   - *.tar.gz
+
+# PyInstaller artifacts
+build/
+dist/
+*.spec
