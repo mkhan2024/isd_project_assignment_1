@@ -47,3 +47,9 @@ Polymorphism was utilized by:
 - Tests: `python -m unittest discover -s tests`
 - Strategy: `python A02_main.py`
 - Observer: `python A03_main.py`
+
+### Assignment 4
+Details about the previous assignment.
+
+### Assignment 5
+Implemented filtering in ClientLookupWindow, generated HTML documentation using Sphinx, and created an installer for distribution.
